@@ -1,6 +1,7 @@
 .container {
   padding: 2rem;
   color: var(--text-primary);
+  min-height: calc(100vh - 100%);
 }
 
 h1 {
