@@ -1,0 +1,134 @@
+.container {
+  padding: 2rem;
+  color: var(--text-primary);
+  height: 100vh;
+}
+
+h1 {
+  color: var(--text-primary);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.search-bar {
+  background-color: var(--background-secondary);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  box-shadow: 0 2px 4px var(--card-shadow);
+}
+
+input[type="text"],
+input[type="number"] {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--card-bg);
+  border-radius: 8px;
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.2);
+}
+
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+button.primary {
+  background-color: var(--accent-color);
+  color: var(--text-primary);
+}
+
+button.secondary {
+  background-color: var(--background-secondary);
+  color: var(--text-primary);
+}
+
+button.outline {
+  background-color: transparent;
+  border: 1px solid var(--text-secondary);
+  color: var(--text-primary);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 2rem;
+  background-color: var(--background-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  font-weight: 500;
+  text-align: left;
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+td {
+  padding: 1rem;
+  color: var(--text-secondary);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+tr:hover {
+  background-color: var(--hover-bg);
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actions button {
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-secondary);
+  background-color: var(--background-secondary);
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+

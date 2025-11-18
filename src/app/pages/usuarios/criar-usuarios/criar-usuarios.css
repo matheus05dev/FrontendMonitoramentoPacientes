@@ -1,0 +1,142 @@
+/* Copiado/adaptado de criar-pacientes.css para padronizar visual */
+.page-card,
+.page-container {
+  padding: 2rem;
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.page-card h2,
+.page-header h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.form-container,
+.page-card {
+  background-color: var(--background-secondary);
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 12px var(--card-shadow);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label,
+.form-row label {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+input,
+select,
+textarea,
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: white;
+  color: var(--text-input, #0b0b0b);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder,
+textarea::placeholder,
+.form-control::placeholder {
+  color: var(--text-color-caixa, #9aa3af);
+  opacity: 0.8;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.actions,
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn,
+button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.btn-secondary {
+  background-color: rgb(210, 55, 55);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+
+.btn.cancel,
+.btn-add {
+  background-color: transparent;
+  color: var(--accent-light);
+  border: 1px dashed var(--accent-light);
+  border-radius: 12px;
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.5rem;
+  min-width: auto;
+}

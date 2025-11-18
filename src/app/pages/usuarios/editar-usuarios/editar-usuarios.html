@@ -1,0 +1,36 @@
+<div class="page-container">
+    <div class="page-header">
+        <h1>Editar Usuário</h1>
+        <p class="page-subtitle">Atualize as informações do usuário</p>
+    </div>
+
+    <div class="form-container">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input class="form-control" formControlName="username" placeholder="Digite o username" />
+                </div>
+
+                <div class="form-group">
+                    <label>Senha (deixe em branco para manter a atual)</label>
+                    <input type="password" class="form-control" formControlName="password"
+                        placeholder="Nova senha (opcional)" />
+                </div>
+
+                <div class="form-group">
+                    <label>Role</label>
+                    <select class="form-control" formControlName="role">
+                        <option value="" disabled>Selecione</option>
+                        <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" (click)="cancel()" class="btn btn-secondary">Cancelar</button>
+                <button type="submit" [disabled]="form.invalid" class="btn btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>

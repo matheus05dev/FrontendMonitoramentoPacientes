@@ -1,0 +1,150 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: calc(100vh - 64px);
+  padding: 16px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.card {
+  width: 100%;
+  max-width: 1200px;
+  max-height: calc(100vh - 96px);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.card ::ng-deep .mat-mdc-card-header {
+  background-color: var(--cor-secundaria-escuro);
+  padding: 16px 24px;
+  margin: 0;
+}
+
+.card ::ng-deep .mat-mdc-card-title {
+  color: var(--text-primary);
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.card-content {
+  padding: 20px 24px;
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--bg-surface);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 24px;
+  margin-bottom: 16px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--cor-secundaria-escuro);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  color: var(--text-color-caixa);
+  font-size: 14px;
+  word-break: break-word;
+}
+
+.info-list {
+  margin: 4px 0 0 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.info-list li {
+  color: var(--text-color-caixa);
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.actions ::ng-deep .mat-mdc-raised-button {
+  background-color: var(--cor-primaria);
+  color: var(--texto-branco);
+}
+
+.actions ::ng-deep .mat-mdc-raised-button:not([color]) {
+  background-color: var(--cinza-400);
+  color: var(--texto-branco);
+}
+
+.actions ::ng-deep .mat-mdc-raised-button:hover {
+  opacity: 0.9;
+}
+
+.not-found {
+  text-align: center;
+  color: var(--muted);
+  font-size: 16px;
+  padding: 24px 0;
+}
+
+@media (max-width: 900px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .info-item.full-width {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 12px;
+    height: calc(100vh - 64px);
+  }
+
+  .card {
+    max-height: calc(100vh - 88px);
+  }
+
+  .card-content {
+    padding: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+

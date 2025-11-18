@@ -1,0 +1,48 @@
+<div class="container">
+  <h1>Lista de Pacientes</h1>
+
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchNome" (input)="onSearch()" placeholder="Buscar por nome...">
+    <button class="primary" (click)="createPaciente()">
+      <mat-icon>add</mat-icon>
+      Novo Paciente
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Carregando...</div>
+
+  <table *ngIf="!loading && filteredPacientes.length > 0">
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>CPF</th>
+        <th>Sexo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let paciente of filteredPacientes">
+        <td>{{ paciente.nome }}</td>
+        <td>{{ paciente.email }}</td>
+        <td>{{ paciente.cpf }}</td>
+        <td>{{ paciente.sexo }}</td>
+        <td class="actions">
+          <button class="info" (click)="viewPaciente(paciente.id)" matTooltip="Ver detalhes">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button class="warning" (click)="editPaciente(paciente.id)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="danger" (click)="deletePaciente(paciente.id)" matTooltip="Excluir">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && filteredPacientes.length === 0" class="no-data">
+    Nenhum paciente encontrado.
+  </div>
+</div>

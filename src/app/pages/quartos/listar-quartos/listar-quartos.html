@@ -1,0 +1,50 @@
+<div class="container">
+  <h1>Lista de Quartos</h1>
+
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar por número...">
+    <button class="primary" (click)="createQuarto()">
+      <mat-icon>add</mat-icon>
+      Novo Quarto
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Carregando...</div>
+
+  <table *ngIf="!loading && filteredQuartos.length > 0">
+    <thead>
+      <tr>
+        <th>Número</th>
+        <th>Localização</th>
+        <th>Tipo</th>
+        <th>Capacidade</th>
+        <th>Ocupação</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let quarto of filteredQuartos">
+        <td>{{ quarto.numero }}</td>
+        <td>{{ quarto.localizacao }}</td>
+        <td>{{ quarto.tipo }}</td>
+        <td>{{ quarto.capacidade }}</td>
+        <td>{{ quarto.pacientesIds.length }}/{{ quarto.capacidade }}</td>
+        <td class="actions">
+          <button class="info" (click)="viewQuarto(quarto.id)" matTooltip="Ver detalhes">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button class="warning" (click)="editQuarto(quarto.id)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="danger" (click)="deleteQuarto(quarto.id)" matTooltip="Excluir">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && filteredQuartos.length === 0" class="no-data">
+    Nenhum quarto encontrado.
+  </div>
+</div>

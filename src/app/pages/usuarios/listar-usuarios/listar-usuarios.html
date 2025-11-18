@@ -1,0 +1,41 @@
+<div class="container">
+    <h1>Lista de Usuários</h1>
+
+    <div class="search-bar">
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar por username ou role...">
+        <button class="btn outline" (click)="createUser()">
+            <mat-icon>add</mat-icon>
+            Novo Usuário
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="loading">Carregando...</div>
+
+    <table *ngIf="!loading && filteredUsuarios.length > 0">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let u of filteredUsuarios">
+                <td>{{ u.username }}</td>
+                <td>{{ u.role }}</td>
+                <td class="actions">
+                    <button class="warning" (click)="editUser(u.id)" matTooltip="Editar">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button class="danger" (click)="deleteUser(u.id)" matTooltip="Excluir">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && filteredUsuarios.length === 0" class="no-data">
+        Nenhum usuário encontrado.
+    </div>
+</div>

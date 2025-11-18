@@ -1,0 +1,62 @@
+<div class="container">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Detalhes do Funcionário</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content *ngIf="funcionario" class="card-content">
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Nome:</span>
+          <span class="info-value">{{ funcionario.nome }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Email:</span>
+          <span class="info-value">{{ funcionario.email }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Sexo:</span>
+          <span class="info-value">{{ funcionario.sexo }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Data de Nascimento:</span>
+          <span class="info-value">{{ funcionario.dataNascimento }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">CPF:</span>
+          <span class="info-value">{{ funcionario.cpf }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Cargo:</span>
+          <span class="info-value">{{ funcionario.cargo }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Identificação:</span>
+          <span class="info-value">{{ funcionario.identificacao }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Telefones:</span>
+          <ul class="info-list">
+            <li *ngFor="let tel of funcionario.telefones">({{ tel.ddd }}) {{ tel.numero }}</li>
+          </ul>
+        </div>
+        <div class="info-item full-width">
+          <span class="info-label">Especialidades:</span>
+          <span class="info-value">{{ funcionario.especialidades.join(', ') }}</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="edit()">Editar</button>
+        <button mat-raised-button (click)="back()">Voltar</button>
+      </div>
+    </mat-card-content>
+
+    <mat-card-content *ngIf="!funcionario" class="card-content">
+      <p class="not-found">Funcionário não encontrado.</p>
+      <div class="actions">
+        <button mat-raised-button (click)="back()">Voltar</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

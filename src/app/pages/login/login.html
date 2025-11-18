@@ -1,0 +1,26 @@
+<div class="login-container">
+  <div class="login-card">
+    <h1>Login</h1>
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <mat-form-field appearance="fill">
+        <mat-label>Login</mat-label>
+        <input matInput formControlName="login" placeholder="Digite seu login">
+        <mat-error *ngIf="form.get('login')?.hasError('required')">
+          Login é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Senha</mat-label>
+        <input matInput formControlName="senha" type="password">
+        <mat-error *ngIf="form.get('senha')?.hasError('required')">
+          Senha é obrigatória
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        Entrar
+      </button>
+    </form>
+  </div>
+</div>

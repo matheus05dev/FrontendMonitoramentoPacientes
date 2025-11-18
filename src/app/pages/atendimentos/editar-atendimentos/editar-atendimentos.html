@@ -1,0 +1,199 @@
+<div class="page-container" >
+
+  <div class="page-header">
+    <h1>
+      <mat-icon>edit</mat-icon>
+      Editar Atendimento
+    </h1>
+    <p class="page-subtitle">Altere os dados necessários e salve o atendimento</p>
+  </div>
+
+  <div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+      <!-- Informações do Atendimento -->
+      <div class="form-section">
+        <h2 class="section-title-info">
+          <mat-icon>info</mat-icon>
+          Informações do Atendimento
+        </h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="paciente">
+              <mat-icon>person</mat-icon>
+              Paciente *
+            </label>
+            <select id="paciente" class="form-control" formControlName="paciente">
+              <option value="">Selecione um paciente</option>
+              <option *ngFor="let paciente of pacientes" [ngValue]="paciente">{{ paciente.nome }}</option>
+            </select>
+            <div *ngIf="form.get('paciente')?.invalid && form.get('paciente')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Paciente é obrigatório.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="medicoResponsavel">
+              <mat-icon>local_hospital</mat-icon>
+              Médico Responsável *
+            </label>
+            <select id="medicoResponsavel" class="form-control" formControlName="medicoResponsavel">
+              <option value="">Selecione um médico</option>
+              <option *ngFor="let medico of medicos" [ngValue]="medico">{{ medico.nome }}</option>
+            </select>
+            <div *ngIf="form.get('medicoResponsavel')?.invalid && form.get('medicoResponsavel')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Médico responsável é obrigatório.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="medicoComplicacao">
+              <mat-icon>medical_services</mat-icon>
+              Médico de Complicação
+            </label>
+            <select id="medicoComplicacao" class="form-control" formControlName="medicoComplicacao">
+              <option value="">Selecione um médico</option>
+              <option *ngFor="let medico of medicos" [ngValue]="medico">{{ medico.nome }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="statusPaciente">
+              <mat-icon>monitor_heart</mat-icon>
+              Status do Paciente *
+            </label>
+            <select id="statusPaciente" class="form-control" formControlName="statusPaciente">
+              <option value="">Selecione o status</option>
+              <option *ngFor="let status of statusPacientes" [ngValue]="status">{{status}}</option>
+            </select>
+            <div *ngIf="form.get('statusPaciente')?.invalid && form.get('statusPaciente')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Status do paciente é obrigatório.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="acompanhante">
+              <mat-icon>people</mat-icon>
+              Acompanhante
+            </label>
+            <input id="acompanhante" type="text" class="form-control" formControlName="acompanhante">
+          </div>
+
+          <div class="form-group">
+            <label for="statusMonitoramento">
+              <mat-icon>visibility</mat-icon>
+              Status de Monitoramento
+            </label>
+            <select id="statusMonitoramento" class="form-control" formControlName="statusMonitoramento">
+              <option value="">Selecione o status</option>
+              <option *ngFor="let status of statusMonitoramentos" [ngValue]="status">{{status}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Condições e Diagnóstico -->
+      <div class="form-section">
+        <h2 class="section-title-telefone">
+          <mat-icon>healing</mat-icon>
+          Condições e Diagnóstico
+        </h2>
+
+        <div class="form-group">
+          <label for="condicoesPreexistentes">
+            <mat-icon>warning</mat-icon>
+            Condições Pré-existentes
+          </label>
+          <textarea id="condicoesPreexistentes" class="form-control" rows="3"
+            formControlName="condicoesPreexistentes"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="diagnostico">
+              <mat-icon>assignment</mat-icon>
+              Diagnóstico
+            </label>
+            <select id="diagnostico" class="form-control" formControlName="diagnostico">
+              <option value="">Selecione um diagnóstico</option>
+              <option *ngFor="let diag of diagnosticos" [ngValue]="diag.key">{{diag.key}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="diagnosticoComplicacao">
+              <mat-icon>report_problem</mat-icon>
+              Diagnóstico de Complicação
+            </label>
+            <select id="diagnosticoComplicacao" class="form-control" formControlName="diagnosticoComplicacao">
+              <option value="">Selecione um diagnóstico</option>
+              <option *ngFor="let diag of diagnosticos" [ngValue]="diag.key">{{diag.key}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tratamento e Observações -->
+      <div class="form-section">
+        <h2 class="section-title-alergia">
+          <mat-icon>description</mat-icon>
+          Tratamento e Observações
+        </h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tratamento">
+              <mat-icon>medication</mat-icon>
+              Tratamento
+            </label>
+            <textarea id="tratamento" class="form-control" rows="3" formControlName="tratamento"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="tratamentoComplicacao">
+              <mat-icon>medication_liquid</mat-icon>
+              Tratamento de Complicação
+            </label>
+            <textarea id="tratamentoComplicacao" class="form-control" rows="3"
+              formControlName="tratamentoComplicacao"></textarea>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="observacoes">
+            <mat-icon>note</mat-icon>
+            Observações
+          </label>
+          <textarea id="observacoes" class="form-control" rows="3" formControlName="observacoes"></textarea>
+        </div>
+      </div>
+
+      <div *ngIf="error" class="error-message">
+        <mat-icon>error</mat-icon>
+        {{ error }}
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="cancelar()">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading || form.invalid">
+          <mat-icon>{{ loading ? 'hourglass_empty' : 'save' }}</mat-icon>
+          {{ loading ? 'Atualizando...' : 'Atualizar Atendimento' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

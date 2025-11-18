@@ -1,0 +1,129 @@
+<div class="container">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Informações do Atendimento</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="card-content">
+      <ng-container *ngIf="loading">
+        <p class="not-found">Carregando atendimento...</p>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && error">
+        <p class="not-found">{{ error }}</p>
+        <div class="actions">
+          <button mat-raised-button (click)="voltar()">Voltar</button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!loading && !error && atendimento as atendimentoData">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Paciente</span>
+            <span class="info-value">{{ atendimentoData.nomePaciente || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status do Paciente</span>
+            <span class="info-value">{{ atendimentoData.statusPaciente || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Status Monitoramento</span>
+            <span class="info-value">{{ atendimentoData.statusMonitoramento || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Acompanhante</span>
+            <span class="info-value">{{ atendimentoData.acompanhante || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Condições Pré-existentes</span>
+            <span class="info-value">{{ atendimentoData.condicoesPreexistentes || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Data de Entrada</span>
+            <span class="info-value">{{ atendimentoData.dataEntrada | date: 'medium' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Data de Saída</span>
+            <span class="info-value">{{ atendimentoData.dataSaida ? (atendimentoData.dataSaida | date: 'medium') : 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Número do Quarto</span>
+            <span class="info-value">{{ atendimentoData.numeroQuarto || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Médico Responsável</span>
+            <span class="info-value">{{ atendimentoData.nomeMedicoResponsavel || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Médico Complicação</span>
+            <span class="info-value">{{ atendimentoData.nomeMedicoComplicacao || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Diagnóstico</span>
+            <span class="info-value">{{ atendimentoData.diagnostico || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Diagnóstico Complicação</span>
+            <span class="info-value">{{ atendimentoData.diagnosticoComplicacao || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tratamento</span>
+            <span class="info-value">{{ atendimentoData.tratamento || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tratamento Complicação</span>
+            <span class="info-value">{{ atendimentoData.tratamentoComplicacao || 'N/A' }}</span>
+          </div>
+          <div class="info-item full-width">
+            <span class="info-label">Observações</span>
+            <span class="info-value">{{ atendimentoData.observacoes || 'N/A' }}</span>
+          </div>
+        </div>
+
+        <div class="readings" *ngIf="atendimentoData.leituras?.length">
+          <span class="section-title">Leituras do Sensor</span>
+          <div class="table-wrapper">
+            <table class="readings-table">
+              <thead>
+                <tr>
+                  <th>Tipo de Dado</th>
+                  <th>Valor</th>
+                  <th>Data/Hora</th>
+                  <th>Condição de Saúde</th>
+                  <th>Gravidade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let leitura of atendimentoData.leituras">
+                  <td>{{ leitura.tipoDado }}</td>
+                  <td>{{ leitura.valor }} {{ leitura.unidadeMedida }}</td>
+                  <td>{{ leitura.dataHora | date: 'short' }}</td>
+                  <td>{{ leitura.condicaoSaude || 'N/A' }}</td>
+                  <td>{{ leitura.gravidade || 'N/A' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="edit()">Editar</button>
+          <button mat-raised-button (click)="voltar()">Voltar</button>
+        </div>
+      </ng-container>
+
+
+     
+
+
+
+      <ng-container *ngIf="!loading && !error && !atendimento">
+        <p class="not-found">Atendimento não encontrado.</p>
+        <div class="actions">
+          <button mat-raised-button (click)="voltar()">Voltar</button>
+        </div>
+      </ng-container>
+    </mat-card-content>
+  </mat-card>
+</div>
+

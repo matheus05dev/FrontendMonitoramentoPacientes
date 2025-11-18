@@ -1,0 +1,241 @@
+<div class="page-container" [class.dark-theme]="isDarkMode">
+  <div class="page-header">
+    <h1>
+      <mat-icon>person_add</mat-icon>
+      Criar Novo Funcionário
+    </h1>
+    <p class="page-subtitle">Preencha os dados abaixo para cadastrar um novo funcionário no sistema</p>
+  </div>
+
+  <div class="form-container">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form">
+      <!-- Informações Básicas -->
+      <div class="form-section">
+        <h2 class="section-title-info">
+          <mat-icon>info</mat-icon>
+          Informações Básicas
+        </h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nome">
+              <mat-icon>badge</mat-icon>
+              Nome Completo
+            </label>
+            <input 
+              type="text" 
+              id="nome" 
+              formControlName="nome" 
+              class="form-control"
+              placeholder="Digite o nome completo do funcionário">
+            <div *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Nome é obrigatório.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">
+              <mat-icon>email</mat-icon>
+              Email
+            </label>
+            <input 
+              type="email" 
+              id="email" 
+              formControlName="email" 
+              class="form-control"
+              placeholder="exemplo@email.com">
+            <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Email é obrigatório e deve ser válido.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cpf">
+              <mat-icon>credit_card</mat-icon>
+              CPF
+            </label>
+            <input 
+              type="text" 
+              id="cpf" 
+              formControlName="cpf" 
+              placeholder="000.000.000-00" 
+              class="form-control"
+              maxlength="14">
+            <div *ngIf="form.get('cpf')?.invalid && form.get('cpf')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              CPF é obrigatório.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sexo">
+              <mat-icon>wc</mat-icon>
+              Sexo
+            </label>
+            <select id="sexo" formControlName="sexo" class="form-control">
+              <option value="">Selecione o sexo</option>
+              <option *ngFor="let s of sexos" [value]="s">{{ s }}</option>
+            </select>
+            <div *ngIf="form.get('sexo')?.invalid && form.get('sexo')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Sexo é obrigatório.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="dataNascimento">
+              <mat-icon>calendar_today</mat-icon>
+              Data de Nascimento
+            </label>
+            <input 
+              type="date" 
+              id="dataNascimento" 
+              formControlName="dataNascimento" 
+              class="form-control">
+            <div *ngIf="form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Data de nascimento é obrigatória.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telefones -->
+      <div class="form-section" formArrayName="telefones">
+        <h2 class="section-title-telefone">
+          <mat-icon>phone</mat-icon>
+          Telefones
+        </h2>
+        <div *ngFor="let tel of telefones.controls; let i = index" [formGroupName]="i" class="telefone-group">
+          <label>Telefone {{ i + 1 }}</label>
+          <div class="telefone-row">
+            <div class="form-group">
+              <input 
+                type="text" 
+                formControlName="DDD" 
+                placeholder="DDD" 
+                maxlength="2" 
+                class="form-control"
+                pattern="[0-9]*">
+              <div *ngIf="tel.get('DDD')?.invalid && tel.get('DDD')?.touched" class="error">
+                <mat-icon>error</mat-icon>
+                DDD é obrigatório.
+              </div>
+            </div>
+            <div class="form-group">
+              <input 
+                type="text" 
+                formControlName="numero" 
+                placeholder="Número (ex: 999999999)" 
+                maxlength="9"
+                class="form-control"
+                pattern="[0-9]*">
+              <div *ngIf="tel.get('numero')?.invalid && tel.get('numero')?.touched" class="error">
+                <mat-icon>error</mat-icon>
+                Número é obrigatório.
+              </div>
+            </div>
+            <button 
+              type="button" 
+              (click)="removeTelefone(i)" 
+              class="btn btn-danger">
+              <mat-icon>delete</mat-icon>
+              Remover
+            </button>
+          </div>
+        </div>
+        <button type="button" (click)="addTelefone()" class="btn btn-add">
+          <mat-icon>add</mat-icon>
+          Adicionar Telefone
+        </button>
+      </div>
+
+      <!-- Informações Profissionais -->
+      <div class="form-section">
+        <h2 class="section-title-alergia">
+          <mat-icon>work</mat-icon>
+          Informações Profissionais
+        </h2>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cargo">
+              <mat-icon>badge</mat-icon>
+              Cargo
+            </label>
+            <select id="cargo" formControlName="cargo" class="form-control">
+              <option value="">Selecione o cargo</option>
+              <option *ngFor="let c of cargos" [value]="c">{{ c }}</option>
+            </select>
+            <div *ngIf="form.get('cargo')?.invalid && form.get('cargo')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Cargo é obrigatório.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="identificacao">
+              <mat-icon>fingerprint</mat-icon>
+              Identificação
+            </label>
+            <input 
+              type="text" 
+              id="identificacao" 
+              formControlName="identificacao" 
+              class="form-control"
+              placeholder="Digite a identificação">
+            <div *ngIf="form.get('identificacao')?.invalid && form.get('identificacao')?.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Identificação é obrigatória.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Especialidades -->
+      <div class="form-section" formArrayName="especialidades">
+        <h2 class="section-title-alergia">
+          <mat-icon>medical_services</mat-icon>
+          Especialidades
+        </h2>
+        <div *ngFor="let esp of especialidades.controls; let i = index" class="alergia-group">
+          <div class="form-group">
+            <input 
+              type="text" 
+              [formControlName]="i" 
+              [placeholder]="'Especialidade ' + (i + 1)" 
+              class="form-control">
+            <div *ngIf="esp.invalid && esp.touched" class="error">
+              <mat-icon>error</mat-icon>
+              Especialidade é obrigatória.
+            </div>
+          </div>
+          <button type="button" (click)="removeEspecialidade(i)" class="btn btn-danger">
+            <mat-icon>delete</mat-icon>
+            Remover
+          </button>
+        </div>
+        <button type="button" (click)="addEspecialidade()" class="btn btn-add">
+          <mat-icon>add</mat-icon>
+          Adicionar Especialidade
+        </button>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" (click)="cancel()" class="btn btn-secondary">
+          <mat-icon>close</mat-icon>
+          Cancelar
+        </button>
+        <button type="submit" [disabled]="form.invalid" class="btn btn-primary">
+          <mat-icon>save</mat-icon>
+          Criar Funcionário
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

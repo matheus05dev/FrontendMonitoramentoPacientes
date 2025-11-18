@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>InfraMed</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script>
+    // Polyfill CRÍTICO para global - DEVE ser executado ANTES de qualquer módulo ES6
+    // Este código é JavaScript puro e executa no contexto global do navegador
+    (function(globalScope) {
+      'use strict';
+      
+      // Obter o objeto global mais apropriado
+      var root = typeof window !== 'undefined' ? window :
+                 typeof globalThis !== 'undefined' ? globalThis :
+                 typeof self !== 'undefined' ? self :
+                 typeof global !== 'undefined' ? global :
+                 this || {};
+      
+      // Definir global como propriedade em todos os objetos globais possíveis
+      if (typeof window !== 'undefined' && !window.global) {
+        window.global = window;
+      }
+      if (typeof globalThis !== 'undefined' && !globalThis.global) {
+        globalThis.global = typeof window !== 'undefined' ? window : globalThis;
+      }
+      if (typeof self !== 'undefined' && !self.global) {
+        self.global = self;
+      }
+      
+      // Tentar criar variável global usando diferentes métodos
+      try {
+        // Método 1: Usar Function constructor (não afetado por strict mode)
+        var fn = new Function('return this')();
+        if (fn && !fn.global) {
+          fn.global = typeof window !== 'undefined' ? window : fn;
+        }
+      } catch(e) {
+        // Ignorar
+      }
+      
+      // Método 2: Definir usando Object.defineProperty
+      try {
+        if (typeof window !== 'undefined') {
+          Object.defineProperty(window, 'global', {
+            value: window,
+            writable: true,
+            configurable: true
+          });
+        }
+      } catch(e) {
+        // Ignorar
+      }
+    })(this);
+  </script>
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

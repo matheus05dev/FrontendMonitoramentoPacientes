@@ -1,0 +1,44 @@
+<div class="container">
+  <h1>Lista de Funcionários</h1>
+
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar por nome...">
+    <button class="primary" (click)="createFuncionario()">
+      <mat-icon>add</mat-icon>
+      Novo Funcionário
+    </button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Email</th>
+        <th>CPF</th>
+        <th>Cargo</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let func of filteredFuncionarios">
+        <td>{{ func.nome }}</td>
+        <td>{{ func.email }}</td>
+        <td>{{ func.cpf }}</td>
+        <td>{{ func.cargo }}</td>
+
+        <td class="actions">
+          <button class="info" (click)="viewFuncionario(func.id)"matTooltip="Ver detalhes">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button class="warning" (click)="editFuncionario(func.id)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="danger" (click)="deleteFuncionario(func.id)" matTooltip="Excluir">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+     
+      </tr>
+    </tbody>
+  </table>
+</div>

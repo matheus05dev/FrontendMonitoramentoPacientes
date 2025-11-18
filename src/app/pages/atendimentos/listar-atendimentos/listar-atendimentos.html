@@ -1,0 +1,54 @@
+<div class="container">
+  <h1>Lista de Atendimentos</h1>
+
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Buscar por nome do paciente...">
+    <button class="primary" (click)="navegarParaCriar()">
+      <mat-icon>add</mat-icon>
+      Novo Atendimento
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Carregando...</div>
+
+  <div *ngIf="error" class="no-data">{{error}}</div>
+
+  <table *ngIf="!loading && !error && filteredAtendimentos.length > 0">
+    <thead>
+      <tr>
+        <th>Nome do Paciente</th>
+        <th>Médico Responsável</th>
+        <th>Status Paciente</th>
+        <th>Data de Entrada</th>
+        <th>Data de Saída</th>
+        <th>Número do Quarto</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let atendimento of filteredAtendimentos">
+        <td>{{atendimento.nomePaciente}}</td>
+        <td>{{atendimento.nomeMedicoResponsavel}}</td>
+        <td>{{atendimento.statusPaciente}}</td>
+        <td>{{atendimento.dataEntrada | date:'short'}}</td>
+        <td>{{atendimento.dataSaida ? (atendimento.dataSaida | date:'short') : 'N/A'}}</td>
+        <td>{{atendimento.numeroQuarto || 'N/A'}}</td>
+        <td class="actions">
+          <button class="info" (click)="navegarParaInfo(atendimento.id!)" matTooltip="Ver detalhes">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button class="warning" (click)="navegarParaEditar(atendimento.id!)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button class="danger" (click)="deletarAtendimento(atendimento.id!)" matTooltip="Excluir">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && !error && filteredAtendimentos.length === 0" class="no-data">
+    Nenhum atendimento encontrado.
+  </div>
+</div>

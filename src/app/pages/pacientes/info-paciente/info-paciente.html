@@ -1,0 +1,54 @@
+<div class="container">
+  <mat-card class="card">
+    <mat-card-header>
+      <mat-card-title>Detalhes do Paciente</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content *ngIf="paciente" class="card-content">
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="info-label">Nome:</span>
+          <span class="info-value">{{ paciente.nome }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Email:</span>
+          <span class="info-value">{{ paciente.email }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Sexo:</span>
+          <span class="info-value">{{ paciente.sexo }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Data de Nascimento:</span>
+          <span class="info-value">{{ paciente.dataNascimento }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">CPF:</span>
+          <span class="info-value">{{ paciente.cpf }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Telefones:</span>
+          <ul class="info-list">
+            <li *ngFor="let tel of paciente.telefones">({{ tel.ddd }}) {{ tel.numero }}</li>
+          </ul>
+        </div>
+        <div class="info-item full-width">
+          <span class="info-label">Alergias:</span>
+          <span class="info-value">{{ paciente.alergias.join(', ') || 'Nenhuma' }}</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" (click)="edit()">Editar</button>
+        <button mat-raised-button (click)="back()">Voltar</button>
+      </div>
+    </mat-card-content>
+
+    <mat-card-content *ngIf="!paciente" class="card-content">
+      <p class="not-found">Paciente não encontrado.</p>
+      <div class="actions">
+        <button mat-raised-button (click)="back()">Voltar</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
