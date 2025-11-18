@@ -1,7 +1,0 @@
-export enum LocalizacaoQuarto {
-  SETOR_NORTE = 'SETOR_NORTE',
-  SETOR_SUL = 'SETOR_SUL',
-  SETOR_LESTE = 'SETOR_LESTE',
-  SETOR_OESTE = 'SETOR_OESTE',
-  SETOR_CENTRO = 'SETOR_CENTRO',
-}
