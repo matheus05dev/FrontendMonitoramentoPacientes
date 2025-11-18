@@ -28,7 +28,8 @@ export class CriarAtendimentos implements OnInit {
   form!: FormGroup;
   loading = false;
   error: string | null = null;
-  isDarkMode = false;
+  // single-theme: dark theme is default
+  isDarkMode = true;
 
   pacientes: PacienteResponse[] = [];
   medicos: FuncionarioSaudeResponseDTO[] = [];
@@ -64,7 +65,7 @@ export class CriarAtendimentos implements OnInit {
       statusMonitoramento: [''],
     });
     // Check for dark theme
-    this.isDarkMode = document.body.classList.contains('dark-theme');
+    this.isDarkMode = true;
   }
 
   carregarPacientes(): void {

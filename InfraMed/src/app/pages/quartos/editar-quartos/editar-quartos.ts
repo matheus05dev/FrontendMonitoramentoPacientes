@@ -25,7 +25,8 @@ export class EditarQuartos implements OnInit {
   id: number;
   localizacoes = Object.values(LocalizacaoQuarto);
   tipos = Object.values(TipoQuarto);
-  isDarkMode = false;
+  // single-theme: dark theme is default
+  isDarkMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +42,7 @@ export class EditarQuartos implements OnInit {
       capacidade: ['', [Validators.required, Validators.min(1)]],
     });
     // Check for dark theme
-    this.isDarkMode = document.body.classList.contains('dark-theme');
+    this.isDarkMode = true;
   }
 
   ngOnInit(): void {

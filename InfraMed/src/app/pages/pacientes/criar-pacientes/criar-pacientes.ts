@@ -22,7 +22,8 @@ import { Sexo } from '../../../core/enum/Sexo.enum';
 export class CriarPacientes {
   form: FormGroup;
   sexos = Object.values(Sexo);
-  isDarkMode = false;
+  // single-theme: dark theme is default
+  isDarkMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -40,9 +41,9 @@ export class CriarPacientes {
     });
     // Add initial telefone
     this.addTelefone();
-    
+
     // Check for dark theme
-    this.isDarkMode = document.body.classList.contains('dark-theme');
+    this.isDarkMode = true;
   }
 
   get telefones(): FormArray {

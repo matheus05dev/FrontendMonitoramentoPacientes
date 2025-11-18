@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     MatListModule,
     MatDividerModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   templateUrl: './toolbar-sidenav.html',
   styleUrls: ['./toolbar-sidenav.css'],
@@ -32,7 +32,7 @@ export class ToolbarSidenav implements OnInit, OnDestroy {
   isOpen = false;
   isDarkTheme = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   private _onKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
@@ -40,13 +40,19 @@ export class ToolbarSidenav implements OnInit, OnDestroy {
     }
   };
 
-  toggle() { this.isOpen = !this.isOpen; }
-  open() { this.isOpen = true; }
-  close() { this.isOpen = false; }
+  toggle() {
+    this.isOpen = !this.isOpen;
+  }
+  open() {
+    this.isOpen = true;
+  }
+  close() {
+    this.isOpen = false;
+  }
 
   toggleTheme() {
-    this.isDarkTheme = !this.isDarkTheme;
-    document.body.classList.toggle('dark-theme');
+    // dark mode removed: no-op to prevent toggling theme
+    this.isDarkTheme = true;
   }
 
   logout() {
@@ -62,5 +68,3 @@ export class ToolbarSidenav implements OnInit, OnDestroy {
     document.removeEventListener('keydown', this._onKeydown);
   }
 }
-
-

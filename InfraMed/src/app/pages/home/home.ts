@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, inject, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -38,15 +46,18 @@ Chart.register(...registerables);
     MatButtonModule,
     MatTooltipModule,
     MatProgressSpinnerModule,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
 export class Home implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('transacoesChart', { static: false }) transacoesChartRef!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('leiturasCriticasChart', { static: false }) leiturasCriticasChartRef!: ElementRef<HTMLCanvasElement>;
-  @ViewChild('atendimentosChart', { static: false }) atendimentosChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('transacoesChart', { static: false })
+  transacoesChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('leiturasCriticasChart', { static: false })
+  leiturasCriticasChartRef!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('atendimentosChart', { static: false })
+  atendimentosChartRef!: ElementRef<HTMLCanvasElement>;
 
   private notificacoesService = inject(NotificacoesService);
   private atendimentosService = inject(AtendimentosService);
@@ -58,24 +69,22 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
   notificacoesPendentes: ActivityDisplay[] = [];
   notificacoesFechadas: ActivityDisplay[] = [];
   atendimentos: AtendimentoResponse[] = [];
-  
+
   totalNotificacoes = 0;
   totalAtendimentos = 0;
-  
+
   isLoadingNotificacoes = false;
   isLoadingAtendimentos = false;
-  isDarkMode = false;
-  
+  // single-theme: assume dark theme is always active
+  isDarkMode = true;
+
   private transacoesChart?: Chart;
   private leiturasCriticasChart?: Chart;
   private atendimentosChart?: Chart;
 
   ngOnInit(): void {
-    // Check system preference on component init
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      this.isDarkMode = true;
-      document.body.classList.add('dark-theme');
-    }
+    // single-theme: do not auto-toggle based on system preference
+    this.isDarkMode = true;
 
     // Carregar notificações via WebSocket
     this.carregarNotificacoes();
@@ -95,7 +104,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     if (this.notificacoesSubscription) {
       this.notificacoesSubscription.unsubscribe();
     }
-    
+
     // Destruir gráficos
     if (this.transacoesChart) {
       this.transacoesChart.destroy();
@@ -111,7 +120,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
   carregarNotificacoes(): void {
     this.isLoadingNotificacoes = true;
     console.log('Iniciando carregamento de notificações...');
-    
+
     // Aguardar um pouco para garantir que o WebSocket esteja conectado
     // O WebSocket já deve estar conectado após o login, mas aguardamos para garantir
     setTimeout(() => {
@@ -119,43 +128,61 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
       this.notificacoesSubscription = this.notificacoesService
         .buscarHistoricoNotificacoes()
         .subscribe({
-            next: (notificacoes: NotificacaoResponse[]) => {
-              console.log('Notificações recebidas no componente:', notificacoes);
-              if (notificacoes && Array.isArray(notificacoes) && notificacoes.length > 0) {
-                console.log(`Transformando ${notificacoes.length} notificações em atividades...`);
-                this.activities = this.transformarNotificacoesEmAtividades(notificacoes);
-                this.notificacoesCriticas = this.filtrarNotificacoesCriticas(this.activities);
-                this.separarNotificacoesPorStatus();
-                this.totalNotificacoes = this.activities.length;
-                console.log(`Atividades criadas: ${this.activities.length}`);
-                console.log(`Notificações críticas: ${this.notificacoesCriticas.length}`);
-                
-                // Atualizar gráficos após carregar dados
-                setTimeout(() => {
-                  this.atualizarGraficos(notificacoes);
-                }, 500);
-              } else {
-                console.log('Nenhuma notificação recebida ou array vazio');
-                this.activities = [];
-                this.notificacoesCriticas = [];
-                this.notificacoesAbertas = [];
-                this.notificacoesPendentes = [];
-                this.notificacoesFechadas = [];
-                this.totalNotificacoes = 0;
-              }
-              this.isLoadingNotificacoes = false;
-            },
+          next: (notificacoes: NotificacaoResponse[]) => {
+            console.log('Notificações recebidas no componente:', notificacoes);
+            if (
+              notificacoes &&
+              Array.isArray(notificacoes) &&
+              notificacoes.length > 0
+            ) {
+              console.log(
+                `Transformando ${notificacoes.length} notificações em atividades...`
+              );
+              this.activities =
+                this.transformarNotificacoesEmAtividades(notificacoes);
+              this.notificacoesCriticas = this.filtrarNotificacoesCriticas(
+                this.activities
+              );
+              this.separarNotificacoesPorStatus();
+              this.totalNotificacoes = this.activities.length;
+              console.log(`Atividades criadas: ${this.activities.length}`);
+              console.log(
+                `Notificações críticas: ${this.notificacoesCriticas.length}`
+              );
+
+              // Atualizar gráficos após carregar dados
+              setTimeout(() => {
+                this.atualizarGraficos(notificacoes);
+              }, 500);
+            } else {
+              console.log('Nenhuma notificação recebida ou array vazio');
+              this.activities = [];
+              this.notificacoesCriticas = [];
+              this.notificacoesAbertas = [];
+              this.notificacoesPendentes = [];
+              this.notificacoesFechadas = [];
+              this.totalNotificacoes = 0;
+            }
+            this.isLoadingNotificacoes = false;
+          },
           error: (error) => {
-            console.error('Erro ao carregar notificações via WebSocket:', error);
-            console.warn('Notificações não serão carregadas. Verifique se o WebSocket está configurado corretamente no backend.');
+            console.error(
+              'Erro ao carregar notificações via WebSocket:',
+              error
+            );
+            console.warn(
+              'Notificações não serão carregadas. Verifique se o WebSocket está configurado corretamente no backend.'
+            );
             this.isLoadingNotificacoes = false;
             this.activities = [];
-          }
+          },
         });
     }, 500); // Reduzido para 500ms, já que o WebSocket deve estar conectado após o login
   }
 
-  transformarNotificacoesEmAtividades(notificacoes: NotificacaoResponse[]): ActivityDisplay[] {
+  transformarNotificacoesEmAtividades(
+    notificacoes: NotificacaoResponse[]
+  ): ActivityDisplay[] {
     return notificacoes
       .sort((a, b) => {
         // Ordenar por data de criação (mais recentes primeiro)
@@ -163,7 +190,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         const dataB = b.dataCriacao ? new Date(b.dataCriacao).getTime() : 0;
         return dataB - dataA;
       })
-      .map(notificacao => {
+      .map((notificacao) => {
         const leitura = notificacao.leituraSensor;
         const tipoDado = leitura?.tipoDado || '';
         const valor = leitura?.valor || 0;
@@ -174,7 +201,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         // Determinar ícone e tipo baseado no tipo de dado
         let icon = 'warning';
         let type = 'alert';
-        
+
         if (tipoDado === TipoDado.TEMPERATURA) {
           icon = 'thermostat';
           type = 'temperature';
@@ -189,7 +216,9 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         // Criar descrição da ação
         let action = '';
         if (tipoDado && valor) {
-          action = `${this.formatarTipoDado(tipoDado)}: ${valor} ${unidadeMedida}`;
+          action = `${this.formatarTipoDado(
+            tipoDado
+          )}: ${valor} ${unidadeMedida}`;
           if (gravidade) {
             action += ` (${this.formatarGravidade(gravidade)})`;
           }
@@ -198,7 +227,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         }
 
         // Nome baseado no quarto
-        const name = numeroQuarto > 0 ? `Quarto ${numeroQuarto}` : 'Monitoramento';
+        const name =
+          numeroQuarto > 0 ? `Quarto ${numeroQuarto}` : 'Monitoramento';
 
         // Formatar tempo
         const time = this.formatarTempo(notificacao.dataCriacao);
@@ -249,7 +279,9 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
       if (diferencaMinutos < 1) {
         return 'Agora';
       } else if (diferencaMinutos < 60) {
-        return `${diferencaMinutos} minuto${diferencaMinutos > 1 ? 's' : ''} atrás`;
+        return `${diferencaMinutos} minuto${
+          diferencaMinutos > 1 ? 's' : ''
+        } atrás`;
       } else if (diferencaHoras < 24) {
         return `${diferencaHoras} hora${diferencaHoras > 1 ? 's' : ''} atrás`;
       } else if (diferencaDias < 7) {
@@ -271,7 +303,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
   getStatusClass(status: StatusNotificacao | undefined): string {
     if (!status) return '';
-    
+
     const map: { [key: string]: string } = {
       [StatusNotificacao.ABERTA]: 'status-aberta',
       [StatusNotificacao.EM_ATENDIMENTO]: 'status-em-atendimento',
@@ -283,7 +315,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
   getGravidadeClass(gravidade: Gravidade | undefined): string {
     if (!gravidade) return '';
-    
+
     const map: { [key: string]: string } = {
       [Gravidade.EMERGENCIAL]: 'gravidade-emergencial',
       [Gravidade.ALERTA]: 'gravidade-alerta',
@@ -303,14 +335,17 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
   }
 
   toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    document.body.classList.toggle('dark-theme');
+    // dark mode removed: keep single dark theme; don't toggle body class
+    this.isDarkMode = true;
   }
 
-  filtrarNotificacoesCriticas(activities: ActivityDisplay[]): ActivityDisplay[] {
-    return activities.filter(activity => 
-      activity.gravidade === Gravidade.EMERGENCIAL || 
-      activity.gravidade === Gravidade.ALERTA
+  filtrarNotificacoesCriticas(
+    activities: ActivityDisplay[]
+  ): ActivityDisplay[] {
+    return activities.filter(
+      (activity) =>
+        activity.gravidade === Gravidade.EMERGENCIAL ||
+        activity.gravidade === Gravidade.ALERTA
     );
   }
 
@@ -321,7 +356,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.atendimentos = atendimentos;
         this.totalAtendimentos = atendimentos.length;
         this.isLoadingAtendimentos = false;
-        
+
         // Atualizar gráfico de atendimentos
         setTimeout(() => {
           this.criarGraficoAtendimentos(atendimentos);
@@ -332,21 +367,29 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
         this.isLoadingAtendimentos = false;
         this.atendimentos = [];
         this.totalAtendimentos = 0;
-      }
+      },
     });
   }
 
   separarNotificacoesPorStatus(): void {
-    this.notificacoesAbertas = this.activities.filter(a => a.status === StatusNotificacao.ABERTA);
-    this.notificacoesPendentes = this.activities.filter(a => 
-      a.status === StatusNotificacao.EM_ATENDIMENTO || 
-      a.status === StatusNotificacao.PENDENTE
+    this.notificacoesAbertas = this.activities.filter(
+      (a) => a.status === StatusNotificacao.ABERTA
     );
-    this.notificacoesFechadas = this.activities.filter(a => a.status === StatusNotificacao.FECHADA);
+    this.notificacoesPendentes = this.activities.filter(
+      (a) =>
+        a.status === StatusNotificacao.EM_ATENDIMENTO ||
+        a.status === StatusNotificacao.PENDENTE
+    );
+    this.notificacoesFechadas = this.activities.filter(
+      (a) => a.status === StatusNotificacao.FECHADA
+    );
   }
 
   inicializarGraficos(): void {
-    if (this.transacoesChartRef?.nativeElement && this.leiturasCriticasChartRef?.nativeElement) {
+    if (
+      this.transacoesChartRef?.nativeElement &&
+      this.leiturasCriticasChartRef?.nativeElement
+    ) {
       this.criarGraficoTransacoes();
       this.criarGraficoLeiturasCriticas();
     }
@@ -356,11 +399,17 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
   }
 
   atualizarGraficos(notificacoes: NotificacaoResponse[]): void {
-    if (this.transacoesChartRef?.nativeElement && this.leiturasCriticasChartRef?.nativeElement) {
+    if (
+      this.transacoesChartRef?.nativeElement &&
+      this.leiturasCriticasChartRef?.nativeElement
+    ) {
       this.criarGraficoTransacoes(notificacoes);
       this.criarGraficoLeiturasCriticas(notificacoes);
     }
-    if (this.atendimentosChartRef?.nativeElement && this.atendimentos.length > 0) {
+    if (
+      this.atendimentosChartRef?.nativeElement &&
+      this.atendimentos.length > 0
+    ) {
       this.criarGraficoAtendimentos(this.atendimentos);
     }
   }
@@ -375,9 +424,9 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
 
     // Processar dados de notificações por quarto
     const dadosPorQuarto: { [key: number]: number } = {};
-    
+
     if (notificacoes && notificacoes.length > 0) {
-      notificacoes.forEach(notif => {
+      notificacoes.forEach((notif) => {
         const quarto = notif.numeroQuarto || 0;
         if (quarto > 0) {
           dadosPorQuarto[quarto] = (dadosPorQuarto[quarto] || 0) + 1;
@@ -385,25 +434,34 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
       });
     }
 
-    const quartos = Object.keys(dadosPorQuarto).map(Number).sort((a, b) => a - b);
-    const contagens = quartos.map(quarto => dadosPorQuarto[quarto]);
+    const quartos = Object.keys(dadosPorQuarto)
+      .map(Number)
+      .sort((a, b) => a - b);
+    const contagens = quartos.map((quarto) => dadosPorQuarto[quarto]);
 
-    const isDark = this.isDarkMode || document.body.classList.contains('dark-theme');
+    const isDark = this.isDarkMode;
     const textColor = isDark ? '#e2e8f0' : '#1e293b';
-    const gridColor = isDark ? 'rgba(226, 232, 240, 0.1)' : 'rgba(30, 41, 59, 0.1)';
+    const gridColor = isDark
+      ? 'rgba(226, 232, 240, 0.1)'
+      : 'rgba(30, 41, 59, 0.1)';
 
     const config: ChartConfiguration = {
       type: 'bar',
       data: {
-        labels: quartos.length > 0 ? quartos.map(q => `Quarto ${q}`) : ['Sem dados'],
-        datasets: [{
-          label: 'Número de Notificações',
-          data: contagens.length > 0 ? contagens : [0],
-          backgroundColor: 'rgba(14, 165, 233, 0.6)',
-          borderColor: 'rgba(14, 165, 233, 1)',
-          borderWidth: 2,
-          borderRadius: 4
-        }]
+        labels:
+          quartos.length > 0
+            ? quartos.map((q) => `Quarto ${q}`)
+            : ['Sem dados'],
+        datasets: [
+          {
+            label: 'Número de Notificações',
+            data: contagens.length > 0 ? contagens : [0],
+            backgroundColor: 'rgba(14, 165, 233, 0.6)',
+            borderColor: 'rgba(14, 165, 233, 1)',
+            borderWidth: 2,
+            borderRadius: 4,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -412,41 +470,46 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
           legend: {
             display: true,
             labels: {
-              color: textColor
-            }
+              color: textColor,
+            },
           },
           tooltip: {
-            backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            backgroundColor: isDark
+              ? 'rgba(30, 41, 59, 0.95)'
+              : 'rgba(255, 255, 255, 0.95)',
             titleColor: textColor,
             bodyColor: textColor,
             borderColor: 'rgba(14, 165, 233, 0.5)',
-            borderWidth: 1
-          }
+            borderWidth: 1,
+          },
         },
         scales: {
           y: {
             beginAtZero: true,
             ticks: {
               color: textColor,
-              stepSize: 1
+              stepSize: 1,
             },
             grid: {
-              color: gridColor
-            }
+              color: gridColor,
+            },
           },
           x: {
             ticks: {
-              color: textColor
+              color: textColor,
             },
             grid: {
-              color: gridColor
-            }
-          }
-        }
-      }
+              color: gridColor,
+            },
+          },
+        },
+      },
     };
 
-    this.transacoesChart = new Chart(this.transacoesChartRef.nativeElement, config);
+    this.transacoesChart = new Chart(
+      this.transacoesChartRef.nativeElement,
+      config
+    );
   }
 
   criarGraficoLeiturasCriticas(notificacoes?: NotificacaoResponse[]): void {
@@ -458,10 +521,13 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // Processar dados de notificações críticas ao longo do tempo
-    const notificacoesCriticas = notificacoes?.filter(n => {
-      const gravidade = n.leituraSensor?.gravidade;
-      return gravidade === Gravidade.EMERGENCIAL || gravidade === Gravidade.ALERTA;
-    }) || [];
+    const notificacoesCriticas =
+      notificacoes?.filter((n) => {
+        const gravidade = n.leituraSensor?.gravidade;
+        return (
+          gravidade === Gravidade.EMERGENCIAL || gravidade === Gravidade.ALERTA
+        );
+      }) || [];
 
     // Agrupar por data (últimas 7 dias)
     const hoje = new Date();
@@ -473,8 +539,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
       ultimos7Dias.push(data);
     }
 
-    const contagensPorDia: number[] = ultimos7Dias.map(data => {
-      return notificacoesCriticas.filter(n => {
+    const contagensPorDia: number[] = ultimos7Dias.map((data) => {
+      return notificacoesCriticas.filter((n) => {
         if (!n.dataCriacao) return false;
         const dataNotif = new Date(n.dataCriacao);
         dataNotif.setHours(0, 0, 0, 0);
@@ -482,32 +548,39 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
       }).length;
     });
 
-    const labels = ultimos7Dias.map(data => {
-      return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    const labels = ultimos7Dias.map((data) => {
+      return data.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      });
     });
 
-    const isDark = this.isDarkMode || document.body.classList.contains('dark-theme');
+    const isDark = this.isDarkMode;
     const textColor = isDark ? '#e2e8f0' : '#1e293b';
-    const gridColor = isDark ? 'rgba(226, 232, 240, 0.1)' : 'rgba(30, 41, 59, 0.1)';
+    const gridColor = isDark
+      ? 'rgba(226, 232, 240, 0.1)'
+      : 'rgba(30, 41, 59, 0.1)';
 
     const config: ChartConfiguration = {
       type: 'line',
       data: {
         labels: labels,
-        datasets: [{
-          label: 'Notificações Críticas',
-          data: contagensPorDia,
-          borderColor: 'rgba(14, 165, 233, 1)',
-          backgroundColor: 'rgba(14, 165, 233, 0.1)',
-          borderWidth: 3,
-          fill: true,
-          tension: 0.4,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          pointBackgroundColor: 'rgba(14, 165, 233, 1)',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2
-        }]
+        datasets: [
+          {
+            label: 'Notificações Críticas',
+            data: contagensPorDia,
+            borderColor: 'rgba(14, 165, 233, 1)',
+            backgroundColor: 'rgba(14, 165, 233, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.4,
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -516,41 +589,46 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
           legend: {
             display: true,
             labels: {
-              color: textColor
-            }
+              color: textColor,
+            },
           },
           tooltip: {
-            backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            backgroundColor: isDark
+              ? 'rgba(30, 41, 59, 0.95)'
+              : 'rgba(255, 255, 255, 0.95)',
             titleColor: textColor,
             bodyColor: textColor,
             borderColor: 'rgba(14, 165, 233, 0.5)',
-            borderWidth: 1
-          }
+            borderWidth: 1,
+          },
         },
         scales: {
           y: {
             beginAtZero: true,
             ticks: {
               color: textColor,
-              stepSize: 1
+              stepSize: 1,
             },
             grid: {
-              color: gridColor
-            }
+              color: gridColor,
+            },
           },
           x: {
             ticks: {
-              color: textColor
+              color: textColor,
             },
             grid: {
-              color: gridColor
-            }
-          }
-        }
-      }
+              color: gridColor,
+            },
+          },
+        },
+      },
     };
 
-    this.leiturasCriticasChart = new Chart(this.leiturasCriticasChartRef.nativeElement, config);
+    this.leiturasCriticasChart = new Chart(
+      this.leiturasCriticasChartRef.nativeElement,
+      config
+    );
   }
 
   criarGraficoAtendimentos(atendimentos?: AtendimentoResponse[]): void {
@@ -572,8 +650,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     }
 
     // Contar atendimentos abertos por dia (data de entrada)
-    const atendimentosAbertos: number[] = ultimos7Dias.map(data => {
-      return (atendimentos || this.atendimentos).filter(a => {
+    const atendimentosAbertos: number[] = ultimos7Dias.map((data) => {
+      return (atendimentos || this.atendimentos).filter((a) => {
         if (!a.dataEntrada) return false;
         const dataEntrada = new Date(a.dataEntrada);
         dataEntrada.setHours(0, 0, 0, 0);
@@ -582,8 +660,8 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
     });
 
     // Contar atendimentos fechados por dia (data de saída)
-    const atendimentosFechados: number[] = ultimos7Dias.map(data => {
-      return (atendimentos || this.atendimentos).filter(a => {
+    const atendimentosFechados: number[] = ultimos7Dias.map((data) => {
+      return (atendimentos || this.atendimentos).filter((a) => {
         if (!a.dataSaida) return false;
         const dataSaida = new Date(a.dataSaida);
         dataSaida.setHours(0, 0, 0, 0);
@@ -591,13 +669,18 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
       }).length;
     });
 
-    const labels = ultimos7Dias.map(data => {
-      return data.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    const labels = ultimos7Dias.map((data) => {
+      return data.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      });
     });
 
-    const isDark = this.isDarkMode || document.body.classList.contains('dark-theme');
+    const isDark = this.isDarkMode;
     const textColor = isDark ? '#e2e8f0' : '#1e293b';
-    const gridColor = isDark ? 'rgba(226, 232, 240, 0.1)' : 'rgba(30, 41, 59, 0.1)';
+    const gridColor = isDark
+      ? 'rgba(226, 232, 240, 0.1)'
+      : 'rgba(30, 41, 59, 0.1)';
 
     const config: ChartConfiguration = {
       type: 'bar',
@@ -610,7 +693,7 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             backgroundColor: 'rgba(14, 165, 233, 0.6)',
             borderColor: 'rgba(14, 165, 233, 1)',
             borderWidth: 2,
-            borderRadius: 4
+            borderRadius: 4,
           },
           {
             label: 'Fechados',
@@ -618,9 +701,9 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
             backgroundColor: 'rgba(96, 165, 250, 0.6)',
             borderColor: 'rgba(96, 165, 250, 1)',
             borderWidth: 2,
-            borderRadius: 4
-          }
-        ]
+            borderRadius: 4,
+          },
+        ],
       },
       options: {
         responsive: true,
@@ -629,40 +712,45 @@ export class Home implements OnInit, OnDestroy, AfterViewInit {
           legend: {
             display: true,
             labels: {
-              color: textColor
-            }
+              color: textColor,
+            },
           },
           tooltip: {
-            backgroundColor: isDark ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+            backgroundColor: isDark
+              ? 'rgba(30, 41, 59, 0.95)'
+              : 'rgba(255, 255, 255, 0.95)',
             titleColor: textColor,
             bodyColor: textColor,
             borderColor: 'rgba(14, 165, 233, 0.5)',
-            borderWidth: 1
-          }
+            borderWidth: 1,
+          },
         },
         scales: {
           y: {
             beginAtZero: true,
             ticks: {
               color: textColor,
-              stepSize: 1
+              stepSize: 1,
             },
             grid: {
-              color: gridColor
-            }
+              color: gridColor,
+            },
           },
           x: {
             ticks: {
-              color: textColor
+              color: textColor,
             },
             grid: {
-              color: gridColor
-            }
-          }
-        }
-      }
+              color: gridColor,
+            },
+          },
+        },
+      },
     };
 
-    this.atendimentosChart = new Chart(this.atendimentosChartRef.nativeElement, config);
+    this.atendimentosChart = new Chart(
+      this.atendimentosChartRef.nativeElement,
+      config
+    );
   }
 }

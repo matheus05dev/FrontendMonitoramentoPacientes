@@ -30,7 +30,8 @@ export class EditarFuncionarios implements OnInit {
   error: string | null = null;
   sexos = Object.values(Sexo);
   cargos = Object.values(Cargo);
-  isDarkMode = false;
+  // single-theme: dark theme is default
+  isDarkMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -39,7 +40,7 @@ export class EditarFuncionarios implements OnInit {
     private route: ActivatedRoute,
     private toastr: ToastrService
   ) {
-    this.isDarkMode = document.body.classList.contains('dark-theme');
+    this.isDarkMode = true;
   }
 
   ngOnInit(): void {
@@ -101,7 +102,10 @@ export class EditarFuncionarios implements OnInit {
       funcionario.telefones.forEach((tel) => {
         this.telefones.push(
           this.fb.group({
-            DDD: [tel.ddd.toString(), [Validators.required, Validators.pattern(/^\d+$/)]],
+            DDD: [
+              tel.ddd.toString(),
+              [Validators.required, Validators.pattern(/^\d+$/)],
+            ],
             numero: [tel.numero, Validators.required],
           })
         );
@@ -162,18 +166,20 @@ export class EditarFuncionarios implements OnInit {
         })),
       };
 
-      this.funcionariosService.atualizar(this.funcionarioId, funcionario).subscribe({
-        next: () => {
-          this.loading = false;
-          this.toastr.success('Funcionário atualizado com sucesso!');
-          this.router.navigate(['app/funcionarios']);
-        },
-        error: (err) => {
-          this.loading = false;
-          this.toastr.error('Erro ao atualizar funcionário');
-          console.error(err);
-        },
-      });
+      this.funcionariosService
+        .atualizar(this.funcionarioId, funcionario)
+        .subscribe({
+          next: () => {
+            this.loading = false;
+            this.toastr.success('Funcionário atualizado com sucesso!');
+            this.router.navigate(['app/funcionarios']);
+          },
+          error: (err) => {
+            this.loading = false;
+            this.toastr.error('Erro ao atualizar funcionário');
+            console.error(err);
+          },
+        });
     } else {
       this.form.markAllAsTouched();
     }

@@ -23,7 +23,8 @@ export class CriarQuartos {
   form: FormGroup;
   localizacoes = Object.values(LocalizacaoQuarto);
   tipos = Object.values(TipoQuarto);
-  isDarkMode = false;
+  // single-theme: dark theme is default
+  isDarkMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -36,8 +37,8 @@ export class CriarQuartos {
       tipo: ['', Validators.required],
       capacidade: ['', [Validators.required, Validators.min(1)]],
     });
-    // Check for dark theme
-    this.isDarkMode = document.body.classList.contains('dark-theme');
+    // single-theme: dark theme is default
+    this.isDarkMode = true;
   }
 
   onSubmit(): void {

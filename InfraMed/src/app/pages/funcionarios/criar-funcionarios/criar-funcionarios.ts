@@ -24,7 +24,8 @@ export class CriarFuncionarios {
   form: FormGroup;
   sexos = Object.values(Sexo);
   cargos = Object.values(Cargo);
-  isDarkMode = false;
+  // single-theme: dark theme is default
+  isDarkMode = true;
 
   constructor(
     private fb: FormBuilder,
@@ -43,7 +44,7 @@ export class CriarFuncionarios {
       identificacao: ['', Validators.required],
     });
     // Check for dark theme
-    this.isDarkMode = document.body.classList.contains('dark-theme');
+    this.isDarkMode = true;
   }
 
   get telefones(): FormArray {
