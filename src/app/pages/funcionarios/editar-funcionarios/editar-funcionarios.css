@@ -274,3 +274,12 @@
   color: #F9FBFC !important;
   border-color: #F9FBFC !important;
 }
+
+/* Override local para esta página: inputs com texto preto, mesmo em dark-theme */
+.page-container .form-control {
+  color: #000000 !important;
+}
+
+.page-container .form-control::placeholder {
+  color: rgba(0,0,0,0.6) !important;
+}
