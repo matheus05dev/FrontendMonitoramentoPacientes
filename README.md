@@ -64,8 +64,8 @@ O projeto segue as melhores práticas da arquitetura Angular, com uma estrutura 
 
 **Pré-requisitos:**
 
-- Node.js (`^20.19.0 || ^22.12.0`)
-- Angular CLI (`^20.3.9`)
+- Node.js 20.19.0 ou superior
+- Angular CLI 20.3.9
 - **Backend InfraMed** em execução. Para o correto funcionamento da interface, é essencial que a API do backend esteja ativa. O repositório do backend pode ser encontrado aqui [neste repositório](https://github.com/matheus05dev/BackendMonitoramentoPacientes).
 
 1.  **Clone o repositório:**
