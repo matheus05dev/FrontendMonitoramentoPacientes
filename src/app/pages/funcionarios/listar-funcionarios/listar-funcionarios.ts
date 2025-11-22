@@ -13,12 +13,12 @@ import { Toast, ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-listar-funcionarios',
   imports: [
-    CommonModule, 
+    CommonModule,
     FormsModule,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   templateUrl: './listar-funcionarios.html',
   styleUrls: ['./listar-funcionarios.css'],
@@ -27,6 +27,7 @@ export class ListarFuncionarios implements OnInit {
   funcionarios: FuncionarioSaudeResponseDTO[] = [];
   filteredFuncionarios: FuncionarioSaudeResponseDTO[] = [];
   searchTerm: string = '';
+  loading = false;
 
   constructor(
     private funcionariosService: FuncionariosService,
@@ -39,21 +40,29 @@ export class ListarFuncionarios implements OnInit {
   }
 
   loadFuncionarios(): void {
+    this.loading = true;
     this.funcionariosService.listarTodos().subscribe({
       next: (data) => {
         this.funcionarios = data;
         this.filteredFuncionarios = data;
+        this.loading = false;
       },
-      error: (err) => console.error('Erro ao carregar funcionários:', err),
+      error: (err) => {
+        console.error('Erro ao carregar funcionários:', err);
+        this.loading = false;
+      },
     });
   }
 
   onSearch(): void {
     if (this.searchTerm.trim()) {
-      this.funcionariosService.buscarPorNome(this.searchTerm).subscribe({
-        next: (data) => (this.filteredFuncionarios = data),
-        error: (err) => console.error('Erro na busca:', err),
-      });
+      const term = this.searchTerm.toLowerCase().trim();
+      this.filteredFuncionarios = this.funcionarios.filter(
+        (func) =>
+          func.nome?.toLowerCase().includes(term) ||
+          func.email?.toLowerCase().includes(term) ||
+          func.cpf?.includes(term)
+      );
     } else {
       this.filteredFuncionarios = this.funcionarios;
     }

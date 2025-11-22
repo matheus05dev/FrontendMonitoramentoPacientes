@@ -23,7 +23,6 @@ export class CriarQuartos {
   form: FormGroup;
   localizacoes = Object.values(LocalizacaoQuarto);
   tipos = Object.values(TipoQuarto);
-  // single-theme: dark theme is default
   isDarkMode = true;
 
   constructor(
@@ -43,10 +42,18 @@ export class CriarQuartos {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const request: QuartoRequest = this.form.value;
+      const raw = this.form.value;
+      const request: QuartoRequest = {
+        numero: Number(raw.numero),
+        localizacao: raw.localizacao,
+        tipo: raw.tipo,
+        capacidade: Number(raw.capacidade),
+      };
+      console.log('Enviando criar quarto:', request);
       this.quartosService.criar(request).subscribe({
         next: () => this.router.navigate(['app/quartos']),
-        error: (err) => console.error('Erro ao criar quarto:', err),
+        error: (err) =>
+          console.error('Erro ao criar quarto:', err.status, err.error || err),
       });
     }
   }

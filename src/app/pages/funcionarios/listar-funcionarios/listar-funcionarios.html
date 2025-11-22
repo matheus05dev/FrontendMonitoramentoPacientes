@@ -8,8 +8,9 @@
       Novo Funcionário
     </button>
   </div>
+  <div *ngIf="loading" class="loading">Carregando...</div>
 
-  <table>
+  <table *ngIf="!loading && filteredFuncionarios.length > 0">
     <thead>
       <tr>
         <th>Nome</th>
@@ -27,7 +28,7 @@
         <td>{{ func.cargo }}</td>
 
         <td class="actions">
-          <button class="info" (click)="viewFuncionario(func.id)"matTooltip="Ver detalhes">
+          <button class="info" (click)="viewFuncionario(func.id)" matTooltip="Ver detalhes">
             <mat-icon>visibility</mat-icon>
           </button>
           <button class="warning" (click)="editFuncionario(func.id)" matTooltip="Editar">
@@ -37,8 +38,12 @@
             <mat-icon>delete</mat-icon>
           </button>
         </td>
-     
+
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="!loading && filteredFuncionarios.length === 0" class="no-data">
+    Funcionários inexistentes.
+  </div>
 </div>

@@ -106,8 +106,10 @@
   padding: 0.75rem 1rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  background-color: white; /* Fundo branco para visibilidade */
-  color: var(--text-color-caixa); /* Cor do texto dentro dos inputs */
+  background-color: white;
+  /* Fundo branco para visibilidade */
+  color: var(--text-color-caixa);
+  /* Cor do texto dentro dos inputs */
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
   border-radius: 10px;
@@ -140,11 +142,13 @@
 }
 
 /* Telefones e Alergias */
-.telefone-group, .alergia-group {
+.telefone-group,
+.alergia-group {
   margin-bottom: 1.5rem;
 }
 
-.telefone-row, .alergia-group {
+.telefone-row,
+.alergia-group {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
@@ -181,7 +185,7 @@
 
 .btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-add {
@@ -199,7 +203,8 @@
 .btn-danger {
   background-color: #ef4444;
   color: white;
-  padding: 0.5rem; /* Ajuste para botões de ícone */
+  padding: 0.5rem;
+  /* Ajuste para botões de ícone */
   min-width: auto;
 }
 
@@ -281,5 +286,5 @@
 }
 
 .page-container .form-control::placeholder {
-  color: rgba(0,0,0,0.6) !important;
+  color: rgba(0, 0, 0, 0.6) !important;
 }
