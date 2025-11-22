@@ -98,4 +98,4 @@ Este projeto foi desenvolvido como Trabalho de Conclusão de Curso (TCC) do curs
 
 **Matheus Nunes da Silva**
 
-- GitHub: matheus05dev
+- **GitHub:** [https://github.com/matheus05dev](https://github.com/matheus05dev)
