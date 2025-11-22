@@ -7,7 +7,6 @@ Interface web moderna e responsiva para o sistema de gestão hospitalar InfraMed
   <img src="https://img.shields.io/badge/Angular-20.3.10-red?logo=angular&logoColor=white" alt="Angular 20.3.10">
   <img src="https://img.shields.io/badge/TypeScript-5.8.3-blue?logo=typescript&logoColor=white" alt="TypeScript 5.8.3">
   <img src="https://img.shields.io/badge/Angular_Material-20.2.12-purple?logo=angular&logoColor=white" alt="Angular Material 20.2.12">
-  <img src="https://img.shields.io/badge/SCSS-pink?logo=sass&logoColor=white" alt="SCSS">
 </p>
 
 # 📋 Sumário
@@ -67,7 +66,7 @@ O projeto segue as melhores práticas da arquitetura Angular, com uma estrutura 
 
 - Node.js (`^20.19.0 || ^22.12.0`)
 - Angular CLI (`^20.3.9`)
-- **Backend InfraMed** em execução. Para o correto funcionamento da interface, é essencial que a API do backend esteja ativa. O repositório do backend pode ser encontrado aqui.
+- **Backend InfraMed** em execução. Para o correto funcionamento da interface, é essencial que a API do backend esteja ativa. O repositório do backend pode ser encontrado aqui [neste repositório](https://github.com/matheus05dev/BackendMonitoramentoPacientes).
 
 1.  **Clone o repositório:**
 
