@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -8,6 +8,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-toolbar-sidenav',
@@ -29,10 +30,9 @@ import { CommonModule } from '@angular/common';
 })
 export class ToolbarSidenav implements OnInit, OnDestroy {
   @ViewChild('drawer') drawer!: MatSidenav;
+  private authService = inject(AuthService);
   isOpen = false;
   isDarkTheme = false;
-
-  constructor(private router: Router) {}
 
   private _onKeydown = (e: KeyboardEvent) => {
     if (e.key === 'Escape' || e.key === 'Esc') {
@@ -56,8 +56,7 @@ export class ToolbarSidenav implements OnInit, OnDestroy {
   }
 
   logout() {
-    // TODO: Add proper logout logic
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 
   ngOnInit(): void {

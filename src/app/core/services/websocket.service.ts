@@ -116,7 +116,7 @@ export class WebSocketService {
           return;
         }
 
-      const token = this.tokenService.getToken();
+      const token = this.tokenService.getAccessToken();
       if (!token) {
         reject(new Error('Token não encontrado. Não é possível conectar ao WebSocket.'));
         return;

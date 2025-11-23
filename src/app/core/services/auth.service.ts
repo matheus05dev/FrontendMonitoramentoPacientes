@@ -1,5 +1,5 @@
-import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { WebSocketService } from './websocket.service';
 
 const statusAutenticacaoInicial: UsuarioAutenticado = {
   username: '',
+  role: '',
   exp: 0,
   iat: 0,
 };
@@ -28,15 +29,13 @@ export class AuthService {
   );
   readonly statusAutenticacao = this.statusAutenticacao$.asObservable();
 
-  autenticar(form: LoginRequest): Observable<HttpResponse<TokenResponse>> {
+  autenticar(form: LoginRequest): Observable<TokenResponse> {
     return this.http
-      .post<TokenResponse>(`${API_CONFIG.baseUrl}/auth/login`, form, {
-        observe: 'response',
-      })
+      .post<TokenResponse>(`${API_CONFIG.baseUrl}/auth/login`, form)
       .pipe(
         tap((response) => {
-          const token = response.body?.token || '';
-          this.setUsuarioAutenticado(token);
+          this.tokenService.saveTokens(response);
+          this.setUsuarioAutenticado(response.accessToken);
           // Aguardar um pouco antes de conectar ao WebSocket para garantir que a sessão está estabelecida
           setTimeout(() => {
             this.webSocketService.connect().catch((error) => {
@@ -49,15 +48,51 @@ export class AuthService {
       );
   }
 
+  refreshToken(): Observable<TokenResponse> {
+    const refreshToken = this.tokenService.getRefreshToken();
+    if (!refreshToken) {
+      this.logout();
+      return throwError(
+        () => new Error('Refresh token não encontrado. Deslogando.')
+      );
+    }
+
+    return this.http
+      .post<TokenResponse>(`${API_CONFIG.baseUrl}/auth/refresh`, {
+        refreshToken,
+      })
+      .pipe(
+        tap((tokens: TokenResponse) => {
+          this.tokenService.saveAccessToken(tokens.accessToken);
+          this.setUsuarioAutenticado(tokens.accessToken);
+        })
+      );
+  }
+
   logout(): void {
-    // Desconectar do WebSocket antes de fazer logout
-    this.webSocketService.disconnect();
-    this.limparUsuarioAutenticado();
-    this.router.navigate(['']);
+    this.http.post(`${API_CONFIG.baseUrl}/auth/logout`, {}).subscribe({
+      complete: () => {
+        this.webSocketService.disconnect();
+        this.limparUsuarioAutenticado();
+        this.router.navigate(['']);
+      },
+      error: () => {
+        // Mesmo em caso de erro no backend, limpa o frontend
+        this.webSocketService.disconnect();
+        this.limparUsuarioAutenticado();
+        this.router.navigate(['']);
+      },
+    });
   }
 
   setUsuarioAutenticado(token: string): void {
-    this.tokenService.salvarToken(token);
+    // Este método agora só atualiza o status do BehaviorSubject
+    // A responsabilidade de salvar o token está no autenticar() e refreshToken()
+    if (!token) {
+      this.limparUsuarioAutenticado();
+      return;
+    }
+
     const usuarioAutenticado: UsuarioAutenticado = this.getUsuarioAutenticado();
     try {
       this.statusAutenticacao$.next(usuarioAutenticado);
@@ -69,14 +104,21 @@ export class AuthService {
 
   limparUsuarioAutenticado(): void {
     this.statusAutenticacao$.next(statusAutenticacaoInicial);
-    this.tokenService.excluirToken();
+    this.tokenService.deleteTokens();
   }
 
   getUsuarioAutenticado(): UsuarioAutenticado {
     return {
       username: this.tokenService.getUsername(),
+      role: this.tokenService.getRole(),
       exp: this.tokenService.getExp(),
       iat: this.tokenService.getIat(),
     };
+  }
+
+  isLoggedIn(): boolean {
+    return (
+      !!this.tokenService.getAccessToken() && !this.tokenService.isTokenExpired()
+    );
   }
 }
