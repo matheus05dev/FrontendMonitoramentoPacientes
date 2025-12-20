@@ -116,6 +116,30 @@ Este projeto foi desenvolvido como Trabalho de Conclusão de Curso (TCC) do curs
 
 **Matheus Nunes da Silva**
 
-- **GitHub:** [https://github.com/matheus05dev](https://github.com/matheus05dev)
+- 🎓 Técnico em Desenvolvimento de Sistemas - SENAI 403
+- 💼 GitHub: [@matheus05dev](https://github.com/matheus05dev)
+- 💼 LinkedIn: [matheus-nunes-da-silva](https://linkedin.com/in/matheus-nunes-da-silva-ba92b039b)
+
+### Agradecimentos
+
+- Ao **SENAI 403 "Antônio Ermírio de Moraes"** pela formação técnica
+- Aos **professores orientadores** pelo suporte durante o desenvolvimento
+- À **comunidade open source** pelas ferramentas e frameworks utilizados
 
 ---
+
+## 📜 Licença
+
+Este projeto foi desenvolvido para fins **educacionais e demonstrativos** como Trabalho de Conclusão de Curso.
+
+**Nota:** Este é um projeto de portfólio acadêmico criado para demonstrar habilidades técnicas em desenvolvimento de sistemas. Não está em produção e serve como material de estudo e apresentação profissional.
+
+---
+
+<p align="center">
+  Desenvolvido por <a href="https://github.com/matheus05dev">Matheus Nunes da Silva</a>
+</p>
+
+<p align="center">
+  <sub>InfraMed - Tecnologia a serviço da saúde</sub>
+</p>
